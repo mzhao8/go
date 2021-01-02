@@ -1,14 +1,14 @@
 import copy
-from dlgo.gotypes import player
+from dlgo.gotypes import Player
 
 """ class Move gives you three options for moves: point, pass, or resign. Move.play(point) would be you selecting a point, Move.pass_turn() turns the is_pass to True. Move.is_resign turns the is_resign condition to true """
 
 
-class Move:
+class Move():
     def __init__(self, point=None, is_pass=False, is_resign=False):
         assert (point is not None) ^ is_pass ^ is_resign
         self.point = point
-        self.is_play = self.point is not None
+        self.is_play = (self.point is not None)
         self.is_pass = is_pass
         self.is_resign = is_resign
 
@@ -46,8 +46,7 @@ class GoString:
         return GoString(
             self.color,
             combined_stones,
-            (self.liberties | go_string.liberties) - combined_stones,
-        )
+            (self.liberties | go_string.liberties) - combined_stones)
 
     @property
     def num_liberties(self):
@@ -120,7 +119,7 @@ class Board:
                     continue
                 if neighbor_string is not string:
                     neighbor_string.add_liberty(point)
-            self._grid[point] = None
+            del(self._grid[point])
 
     def is_on_grid(self, point):
         return 1 <= point.row <= self.num_rows and 1 <= point.col <= self.num_cols
@@ -142,7 +141,7 @@ class GameState:
     def __init__(self, board, next_player, previous, move):
         self.board = board
         self.next_player = next_player
-        self.previous_state = previous_state
+        self.previous_state = previous
         self.last_move = move
 
     def apply_move(self, move):
